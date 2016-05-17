@@ -13,20 +13,28 @@ public class MyFirstShip extends BasicSpaceship {
 	//private fields for manipulating ship movement
 	private int width;
 	private int height;
-	private Point p = new Point(0, 0);
+	private Point p = new Point(50, 50);
 	private int c = 0;
 	private double val = .5;
+	private double time = .5;
 	private boolean GoToPoint = false;
 	private boolean NStop = false;
 	private boolean MoveBehaviorLine = false;
 	private boolean Pause = false;
 	private boolean Break = false;
 	private boolean Rotate = false;
-	private boolean GoToCenter = true;
+	private boolean GoToCenter = false;
+	private boolean DrawShapes = true;
+	private boolean DrawSquare = false;
+	private boolean DrawStar = false;
+	private boolean DrawSpiral = false;
+	
+	private int current = 0;
+	private int ssc = 0;
 	
 	//Join the server with the IP address as the first string parameter, and another parameter of the new Ship
 	public static void main(String[] args) {
-		TextClient.run("10.136.35.81", new MyFirstShip());
+		TextClient.run("10.136.39.52", new MyFirstShip());
 	}
 	
 	//Register the ship and get basic map data
@@ -34,12 +42,30 @@ public class MyFirstShip extends BasicSpaceship {
 		this.width = worldWidth;
 		this.height = worldHeight;
 		p = new Point(this.width, this.height);
-		return new RegistrationData("The Meme Machine", new Color(255, 0, 0), 9);
+		return new RegistrationData("The Meme Machine 2", new Color(255, 0, 0), 9);
 	}
 	
 	//Private method used to get to the middle of the map
 	private double getThrustDuration(double distance) {
 		return distance/60;
+	}
+	
+	//Private method to set the next point
+	private void setPoint() {
+		if(ssc == 2) {
+			ssc = 0;
+			p = new Point(100, 50);
+		}
+		
+		if(ssc == 1) {
+			ssc++;
+			p = new Point(100, 100);
+		}
+		
+		if(ssc == 0) {
+			ssc++;
+			p = new Point(50, 100);
+		}
 	}
 	
 	//Returns a new command for the ship to accept
@@ -122,6 +148,110 @@ public class MyFirstShip extends BasicSpaceship {
 			Pause = true;
 			val = .5;
 			return new RotateCommand(ship.getPosition().getAngleTo(new Point(width/2, height/2)) - ship.getOrientation());
+		}
+		
+		//Draw shapes in space
+		if(DrawShapes) {
+			
+			//Draw a square
+			if(DrawSquare) {
+				switch(current) {
+					case 0:
+						current++;
+						return new DeployLaserBeaconCommand();
+						
+					case 1:
+						current++;
+						return new RotateCommand(90);
+						
+					case 2:
+						current++;
+						return new ThrustCommand('B', 3.0, 1.0);
+						
+					case 3:
+						current++;
+						return new IdleCommand(2.0);
+						
+					case 4:
+						current++;
+						return new BrakeCommand(.0);
+						
+					case 5:
+						current = 0;
+						return new DeployLaserBeaconCommand();
+				}
+			}
+			
+			//Draw a star
+			if(DrawStar) {
+				switch(current) {
+					case 0:
+						current++;
+						return new DeployLaserBeaconCommand();
+					
+					case 1:
+						current++;
+						return new RotateCommand(210);
+						
+					case 2:
+						current++;
+						return new ThrustCommand('B', 5.0, 1.0);
+					
+					case 3:
+						current ++;
+						return new IdleCommand(2.0);
+						
+					case 4:
+						current++;
+						return new BrakeCommand(.0);
+					
+					case 5:
+						current++;
+						return new IdleCommand(.5);
+						
+					case 6:
+						current = 0;
+						return new DeployLaserBeaconCommand();
+				}
+			}
+			
+			//Draw a spiral
+			if(DrawSpiral) {
+				switch(current) {
+					case 0:
+						current++;
+						return new DeployLaserBeaconCommand();
+						
+					case 1:
+						current++;
+						return new ThrustCommand('B', time, 1.0);
+						
+					case 2:
+						current++;
+						return new IdleCommand(time);
+						
+					case 3:
+						current++;
+						return new BrakeCommand(.0);
+						
+					case 4:
+						current++;
+						return new IdleCommand(2.0);
+						
+					case 5:
+						current++; time += .5;
+						return new DeployLaserBeaconCommand();
+						
+					case 6:
+						current++;
+						return new RotateCommand(130/time);
+						
+					default:
+						time+=.2;
+						current = 0;
+						return new IdleCommand(1.0);
+				}
+			}
 		}
 		
 		//Returns an idle command if none of the other behaviors are active
