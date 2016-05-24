@@ -6,7 +6,7 @@ import ihs.apcs.spacebattle.*;
 import ihs.apcs.spacebattle.Point;
 import ihs.apcs.spacebattle.commands.*;
 
-//An advanced ship utiliting the 'Advanced' commands (Warp, Radar, etc.)
+//An advanced ship utilizing the 'Advanced' commands (Warp, Radar, etc.)
 public class UltimateShip extends BasicSpaceship {
 	
 	//Current width and height of the map
@@ -25,7 +25,7 @@ public class UltimateShip extends BasicSpaceship {
 	private boolean GoToBaubles = true;
 	
 	public static void main(String[] args) {
-		TextClient.run("10.136.44.4", new UltimateShip());
+		TextClient.run("10.136.44.169", new UltimateShip());
 	}
 	
 	public RegistrationData registerShip(int numImages, int worldWidth, int worldHeight) {
