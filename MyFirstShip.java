@@ -1,8 +1,7 @@
 package SpaceBattle;
 
+//Imports for the client side ship, including 2 directories for SpaceBattle
 import java.awt.*;
-import java.util.*;
-
 import ihs.apcs.spacebattle.*;
 import ihs.apcs.spacebattle.Point;
 import ihs.apcs.spacebattle.commands.*;
@@ -11,65 +10,60 @@ import ihs.apcs.spacebattle.commands.*;
 public class MyFirstShip extends BasicSpaceship {
 	
 	//private fields for manipulating ship movement
+	
+	//World width and height fields
 	private int width;
 	private int height;
+	
+	//A Point to go to
 	private Point p = new Point(50, 50);
+	
+	//Counter variables
 	private int c = 0;
+	private int current = 0;
 	private double val = .5;
 	private double time = .5;
 	private double time2 = 5.5;
+	
+	//Boolean values to determine ship behavior
 	private boolean GoToPoint = false;
 	private boolean NStop = false;
 	private boolean MoveBehaviorLine = false;
 	private boolean Pause = false;
 	private boolean Break = false;
 	private boolean Rotate = false;
-	private boolean GoToCenter = true;
-	private boolean DrawShapes = false;
-	private boolean DrawSquare = false;
-	private boolean DrawStar = false;
-	private boolean DrawSpiral = false;
-	private boolean DrawInverseSpiral = false;
-	private boolean DrawOctoSquare = false;
-	
-	private int current = 0;
-	private int ssc = 0;
-	private int sscs = 0;
+	private boolean GoToCenter = false;
+	private boolean DrawShapes = true;
+	private boolean DrawSquare = true;
+	private boolean DrawStar = true;
+	private boolean DrawSpiral = true;
+	private boolean DrawInverseSpiral = true;
+	private boolean DrawOctoSquare = true;
 	
 	//Join the server with the IP address as the first string parameter, and another parameter of the new Ship
 	public static void main(String[] args) {
-		TextClient.run("10.136.43.171", new MyFirstShip());
+		TextClient.run("10.136.37.62", new MyFirstShip());
 	}
 	
 	//Register the ship and get basic map data
 	public RegistrationData registerShip(int numImages, int worldWidth, int worldHeight) {
+		
+		/*Set the instance variables of width and height to the parameters of the current
+		 * world width and world height respectively
+		 */
 		this.width = worldWidth;
 		this.height = worldHeight;
+		
+		//Set p to the center point
 		p = new Point(this.width, this.height);
+		
+		//Return a new ship object which will receive commands
 		return new RegistrationData("The Meme Machine", new Color(255, 0, 0), 9);
 	}
 	
 	//Private method used to get to the middle of the map
 	private double getThrustDuration(double distance) {
 		return distance/60;
-	}
-	
-	//Private method to set the next point
-	private void setPoint() {
-		if(ssc == 2) {
-			ssc = 0;
-			p = new Point(100, 50);
-		}
-		
-		if(ssc == 1) {
-			ssc++;
-			p = new Point(100, 100);
-		}
-		
-		if(ssc == 0) {
-			ssc++;
-			p = new Point(50, 100);
-		}
 	}
 	
 	//Returns a new command for the ship to accept
@@ -154,235 +148,163 @@ public class MyFirstShip extends BasicSpaceship {
 			return new RotateCommand(ship.getPosition().getAngleTo(new Point(width/2, height/2)) - ship.getOrientation());
 		}
 		
-		//Draw shapes in space
+		//Draw shapes in space, causes a return of an idle command if none of the shape booleans are true
 		if(DrawShapes) {
 			
 			//Draw a square
 			if(DrawSquare) {
-				
-				if(ssc < 4) {
-					switch(current) {
-						case 0:
-							current++;
-							return new DeployLaserBeaconCommand();
-							
-						case 1:
-							current++;
-							return new RotateCommand(90);
-							
-						case 2:
-							current++;
-							return new ThrustCommand('B', 3.0, 1.0);
-							
-						case 3:
-							current++;
-							return new IdleCommand(2.0);
-							
-						case 4:
-							current++;
-							return new BrakeCommand(.0);
-							
-						case 5:
-							current = 0; ssc++;
-							return new DeployLaserBeaconCommand();
-					}
+					
+				//Switch-case statement to create a square in space
+				switch(current) {
+					case 0:
+						current++;
+						return new DeployLaserBeaconCommand();
+						
+					case 1:
+						current++;
+						return new RotateCommand(90);
+						
+					case 2:
+						current++;
+						return new ThrustCommand('B', 3.0, 1.0);
+						
+					case 3:
+						current++;
+						return new IdleCommand(2.0);
+						
+					case 4:
+						current++;
+						return new BrakeCommand(.0);
+						
+					case 5:
+						current = 0; 
+						return new DeployLaserBeaconCommand();
 				}
-				
-				DrawSquare = false; ssc = 0;
 			}
-			
-			if(sscs == 0) {sscs++; return new RotateCommand(72);} 
-			if(sscs == 1) {sscs++; return new ThrustCommand('B', 7.5, 1.0);}
-			if(sscs == 2) {sscs++; return new IdleCommand(7.5);}
-			if(sscs == 3) {sscs++; return new BrakeCommand(.00);}
 			
 			//Draw a star
 			if(DrawStar) {
-				
-				if(ssc < 5) {
-					switch(current) {
-						case 0:
-							current++;
-							return new DeployLaserBeaconCommand();
+					
+				//Switch-case for the star figure
+				switch(current) {
+					case 0:
+						current++;
+						return new DeployLaserBeaconCommand();
+					
+					case 1:
+						current++;
+						return new RotateCommand(210);
 						
-						case 1:
-							current++;
-							return new RotateCommand(210);
-							
-						case 2:
-							current++;
-							return new ThrustCommand('B', 5.0, 1.0);
+					case 2:
+						current++;
+						return new ThrustCommand('B', 5.0, 1.0);
+					
+					case 3:
+						current ++;
+						return new IdleCommand(2.0);
 						
-						case 3:
-							current ++;
-							return new IdleCommand(2.0);
-							
-						case 4:
-							current++;
-							return new BrakeCommand(.0);
+					case 4:
+						current++;
+						return new BrakeCommand(.0);
+					
+					case 5:
+						current++;
+						return new IdleCommand(.5);
 						
-						case 5:
-							current++;
-							return new IdleCommand(.5);
-							
-						case 6:
-							current = 0; ssc++;
-							return new DeployLaserBeaconCommand();
-					}
+					case 6:
+						current = 0; 
+						return new DeployLaserBeaconCommand();
 				}
-				
-				DrawStar = false; ssc = 0;
 			}
-			
-			if(sscs == 4) {sscs++; return new RotateCommand(72);} 
-			if(sscs == 5) {sscs++; return new ThrustCommand('B', 7.5, 1.0);}
-			if(sscs == 6) {sscs++; return new IdleCommand(7.5);}
-			if(sscs == 7) {sscs++; return new BrakeCommand(.00);}
 			
 			//Draw a spiral
 			if(DrawSpiral) {
-				
-				if(ssc < 10) {
-					switch(current) {
-						case 0:
-							current++;
-							return new DeployLaserBeaconCommand();
-							
-						case 1:
-							current++;
-							return new ThrustCommand('B', time, 1.0);
-							
-						case 2:
-							current++;
-							return new IdleCommand(time);
-							
-						case 3:
-							current++;
-							return new BrakeCommand(.0);
-							
-						case 4:
-							current++;
-							return new IdleCommand(2.0);
-							
-						case 5:
-							current++; time += .5;
-							return new DeployLaserBeaconCommand();
-							
-						case 6:
-							current++;
-							return new RotateCommand(130/time);
-							
-						case 7:
-							time +=.2; current = 0; ssc++;
-							return new IdleCommand(1.0);
-					}
+					
+				//switch-case to draw an outward spiral, uses time as a changing variable to create the spiral effect
+				switch(current) {
+					case 0:
+						current++;
+						return new DeployLaserBeaconCommand();
+						
+					case 1:
+						current++;
+						return new ThrustCommand('B', time, 1.0);
+						
+					case 2:
+						current++;
+						return new IdleCommand(time);
+						
+					case 3:
+						current++;
+						return new BrakeCommand(.0);
+						
+					case 4:
+						current++;
+						return new IdleCommand(2.0);
+						
+					case 5:
+						current++; time += .5;
+						return new DeployLaserBeaconCommand();
+						
+					case 6:
+						current++;
+						return new RotateCommand(130/time);
+						
+					case 7:
+						time +=.2; current = 0; 
+						return new IdleCommand(1.0);
 				}
-				
-				DrawSpiral = false; ssc = 0;
 			}
-			
-			if(sscs == 7) {sscs++; return new RotateCommand(72);} 
-			if(sscs == 8) {sscs++; return new ThrustCommand('B', 7.5, 1.0);}
-			if(sscs == 9) {sscs++; return new IdleCommand(7.5);}
-			if(sscs == 10) {sscs++; return new BrakeCommand(.00);}
 			
 			//Draw an Inverse Spiral
 			if(DrawInverseSpiral) {
 				
-				if(ssc < 5) {
-					switch(current) {
-						case 0:
-							current++;
-							return new DeployLaserBeaconCommand();
-						case 1:
-							current++;
-							return new ThrustCommand('B', time2, 1.0);
-						case 2:
-							current++;
-							return new IdleCommand(time2);
-						case 3:
-							current++;
-							return new BrakeCommand(.00);
-						case 4:
-							current++;
-							return new IdleCommand(2.0);
-						case 5:
-							current++; time2 -= .5;
-							return new DeployLaserBeaconCommand();
-						case 6:
-							current++;
-							return new RotateCommand(130/time2);
-						case 7:
-							current = 0; time2 -= .2;
-							return new IdleCommand(time2);
-					}
+				//Switch-case to draw the spiral, using time as a changing variable
+				switch(current) {
+					case 0:
+						current++;
+						return new DeployLaserBeaconCommand();
+					case 1:
+						current++;
+						return new ThrustCommand('B', time2, 1.0);
+					case 2:
+						current++;
+						return new IdleCommand(time2);
+					case 3:
+						current++;
+						return new BrakeCommand(.00);
+					case 4:
+						current++;
+						return new IdleCommand(2.0);
+					case 5:
+						current++; time2 -= .5;
+						return new DeployLaserBeaconCommand();
+					case 6:
+						current++;
+						return new RotateCommand(130/time2);
+					case 7:
+						current = 0; time2 -= .2; 
+						return new IdleCommand(time2);
 				}
-				
-				DrawInverseSpiral = false; ssc = 0;
 			}
 			
-			if(sscs == 10) {sscs++; return new RotateCommand(72);} 
-			if(sscs == 11) {sscs++; return new ThrustCommand('B', 7.5, 1.0);}
-			if(sscs == 12) {sscs++; return new IdleCommand(7.5);}
-			if(sscs == 13) {sscs++; return new BrakeCommand(.00);}
-			
-			//Draw an Octo-Square
+			//Draw an Octo-Square (A square transcribed inside an octagon)
 			if(DrawOctoSquare) {
 				
-				if(ssc < 4) {
-					if(c < 8) {
-						switch(current){
-							case 0:
-								current++;
-								return new DeployLaserBeaconCommand();
-							case 1:
-								current++;
-								return new ThrustCommand('B', 5.0, 1.0);
-							case 2:
-								current++;
-								return new IdleCommand(5.0);
-							case 3:
-								current++;
-								return new BrakeCommand(.00);
-							case 4:
-								current++;
-								return new DeployLaserBeaconCommand();
-							case 5:
-								current = 0; c++; 
-								return new RotateCommand(45);
-						}
-					}
-						
-					if(c == 8) {
-						c++;
-						return new RotateCommand(90);
-					}
+				//Draw the octagon for the first 8 iterations
+				if(c < 8) {
 					
-					if(c == 9) {
-						c++;
-						return new ThrustCommand('B', 5.0, 1.0);
-					}
-					
-					if(c == 10) {
-						c++;
-						return new IdleCommand(5.0);
-					}
-					
-					if(c == 11) {
-						c++;
-						return new BrakeCommand(.00);
-					}
-					
-					switch(current) {
+					//Draws an octagon in space
+					switch(current){
 						case 0:
 							current++;
 							return new DeployLaserBeaconCommand();
 						case 1:
 							current++;
-							return new ThrustCommand('B', 3.5, 1.0);
+							return new ThrustCommand('B', 5.0, 1.0);
 						case 2:
 							current++;
-							return new IdleCommand(3.5);
+							return new IdleCommand(5.0);
 						case 3:
 							current++;
 							return new BrakeCommand(.00);
@@ -390,12 +312,56 @@ public class MyFirstShip extends BasicSpaceship {
 							current++;
 							return new DeployLaserBeaconCommand();
 						case 5:
-							current = 0; ssc++;
-							return new RotateCommand(90);
+							current = 0; c++; 
+							return new RotateCommand(45);
 					}
 				}
+					
+				//Rotate the ship to face the interior of the octagon
+				if(c == 8) {
+					c++;
+					return new RotateCommand(90);
+				}
 				
-				DrawOctoSquare = false; ssc = 0;
+				//Thrust into the middle of the octagon
+				if(c == 9) {
+					c++;
+					return new ThrustCommand('B', 5.0, 1.0);
+				}
+				
+				//Idle while the ship moves inside the octagon
+				if(c == 10) {
+					c++;
+					return new IdleCommand(5.0);
+				}
+				
+				//Stop the ship in the octagon
+				if(c == 11) {
+					c++;
+					return new BrakeCommand(.00);
+				}
+				
+				//Draw a square inside the octagon
+				switch(current) {
+					case 0:
+						current++;
+						return new DeployLaserBeaconCommand();
+					case 1:
+						current++;
+						return new ThrustCommand('B', 3.5, 1.0);
+					case 2:
+						current++;
+						return new IdleCommand(3.5);
+					case 3:
+						current++;
+						return new BrakeCommand(.00);
+					case 4:
+						current++;
+						return new DeployLaserBeaconCommand();
+					case 5:
+						current = 0; 
+						return new RotateCommand(90);
+				}
 			}
 		}	
 		
