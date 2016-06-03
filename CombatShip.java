@@ -34,7 +34,7 @@ public class CombatShip extends BasicSpaceship {
 	public RegistrationData registerShip(int numImages, int worldWidth, int worldHeight) {
 		width = worldWidth;
 		height = worldHeight;
-		return new RegistrationData("Nick", new Color(255, 255, 255), 9);
+		return new RegistrationData("The Meme Machine Mk5", new Color(255, 255, 255), 9);
 	}
 
 	//Determine the ship's next command

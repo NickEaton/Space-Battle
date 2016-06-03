@@ -25,7 +25,7 @@ public class BubbleShip implements Spaceship<KingOfTheBubbleGameInfo> {
 		this.width = width;
 		this.height = height;
 		
-		return new RegistrationData("Nick", new Color(255, 255, 255), 9);
+		return new RegistrationData("The Meme Machine Mk4", new Color(255, 255, 255), 9);
 	}
 
 	//Return a command to the ship
